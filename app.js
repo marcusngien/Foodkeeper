@@ -1,3 +1,84 @@
+const TRANSLATIONS = {
+  en: {
+    pantry: 'Pantry',
+    shopping: 'Shopping List',
+    waste: 'Waste Log',
+    recipes: 'Recipes For You',
+    receipt: 'Scan Receipt',
+    leaderboard: 'Leaderboard',
+    totalItems: 'Total Items',
+    expired: 'Expired',
+    expiringSoon: 'Expiring Soon',
+    monthlyWaste: 'Monthly Waste',
+    addItem: 'Add Item',
+    searchPlaceholder: 'Search ingredients...',
+    logOut: 'Log Out',
+  },
+  ms: {
+    pantry: 'Pantri',
+    shopping: 'Senarai Belanja',
+    waste: 'Log Pembaziran',
+    recipes: 'Resipi Untuk Anda',
+    receipt: 'Imbas Resit',
+    leaderboard: 'Papan Kedudukan',
+    totalItems: 'Jumlah Item',
+    expired: 'Tamat Tempoh',
+    expiringSoon: 'Hampir Tamat',
+    monthlyWaste: 'Pembaziran Bulanan',
+    addItem: 'Tambah Item',
+    searchPlaceholder: 'Cari bahan...',
+    logOut: 'Log Keluar',
+  },
+  zh: {
+    pantry: '食品储藏',
+    shopping: '购物清单',
+    waste: '浪费记录',
+    recipes: '为你推荐食谱',
+    receipt: '扫描收据',
+    leaderboard: '排行榜',
+    totalItems: '总数',
+    expired: '已过期',
+    expiringSoon: '即将过期',
+    monthlyWaste: '本月浪费',
+    addItem: '添加食材',
+    searchPlaceholder: '搜索食材...',
+    logOut: '退出登录',
+  }
+};
+
+let currentLang = 'en';
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('fk_lang', lang);
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const t = TRANSLATIONS[currentLang];
+  // Nav tabs
+  document.querySelector('[data-view="pantry"]').textContent = t.pantry;
+  document.querySelector('[data-view="shopping"]').textContent = t.shopping;
+  document.querySelector('[data-view="waste"]').textContent = t.waste;
+  document.querySelector('[data-view="recipes"]').textContent = t.recipes;
+  document.querySelector('[data-view="receipt"]').textContent = t.receipt;
+  document.querySelector('[data-view="leaderboard"]').textContent = t.leaderboard;
+  // Stats
+  document.querySelectorAll('.stat-label')[0].textContent = t.totalItems;
+  document.querySelectorAll('.stat-label')[1].textContent = t.expired;
+  document.querySelectorAll('.stat-label')[2].textContent = t.expiringSoon;
+  document.querySelectorAll('.stat-label')[3].textContent = t.monthlyWaste;
+  // Buttons
+  document.getElementById('search-input').placeholder = t.searchPlaceholder;
+  document.querySelector('.logout-btn').textContent = t.logOut;
+}
+
+function loadLanguage() {
+  const saved = localStorage.getItem('fk_lang') || 'en';
+  currentLang = saved;
+  applyTranslations();
+}
+
 // ── firebase ──
 const firebaseConfig = {
   apiKey:            "AIzaSyAVCLcRZXQvUvvDm1L20TCY_GPwlX0btfg",
@@ -183,7 +264,7 @@ auth.onAuthStateChanged(async (user) => {
     
     startListening(user.uid);
     loadLocalData();
-    loadSettings();
+    loadSettings(loadLanguage(););
     checkAndNotify();
     
     // puter AI login
